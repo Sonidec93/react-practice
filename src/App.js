@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import Person from './Person/person';
 
-const app = () => {
-  // class App extends Component {
-  const [state, setState] = useState({
+// const app = () => {
+// const [state, setState] = useState({
+//   persons: [
+//     { name: 'Mukul', age: 26 },
+//     { name: 'Manu', age: 27 }
+//   ]
+// })
+class App extends Component {
+
+  state = {
     persons: [
-      { name: 'Mukul', age: 26 },
-      { name: 'Manu', age: 27 }
-    ]
-  })
-  const switchHandler = (newName) => {
-    setState({
+      { id: 'asf1', name: 'mukul', age: 26, hobbies: ['football', 'badminton'] },
+      { id: 'asf2', name: 'Ramesh', age: 28, hobbies: ['chess', 'carrom'] }
+    ],
+    showPerson: false
+  }
+
+  switchHandler = (newName) => {
+    this.setState({
       persons: [
         { name: newName, age: 28 },
         { name: 'Manu', age: 27 }
@@ -20,25 +29,45 @@ const app = () => {
     });//using useState react hook will update the state not merge it to old state so we have to make sure we update all values to the state we want to update
 
   }
-  const changeFunc = (event) => {
-
-    setState({
-      persons: [
-        { name: event.target.value, age: 25 }
-      ]
+  changeFunc = (index, event) => {
+    let persons = [...this.state.persons];
+    persons[index].name = event.target.value;
+    this.setState({
+      persons
     })
   }
-  const style = {
-    backgroundColor: 'grey'
+
+  toggleShowPerson = () => {
+    let toggledValue = !this.state.showPerson;
+    this.setState({ showPerson: toggledValue });
   }
-  // render() {
-  return (
-    <div className="App" style={style}>
-      <Person name={state.persons[0].name} age={state.persons[0].age} click={switchHandler.bind(this, 'Mayank')}  changeFunc={changeFunc}>My Hobbies are cricket,football</Person>
-      <button onClick={switchHandler.bind(this, 'Ramesh')}>Switch</button>
-    </div>
-  );
-  // }
+  deleteHandler = (index) => {
+    let persons = [...this.state.persons];
+    persons.splice(index, 1);
+    this.setState({ persons });
+  }
+  render() {
+    let person = null;
+    if (this.state.showPerson) {
+      person = (
+        <div>
+          {this.state.persons.map((x, index) => {
+            return <Person name={x.name} age={x.age} changeFunc={this.changeFunc.bind(this, index)} onDelete={this.deleteHandler.bind(this, index)} key={x.id} >My hobbbies are:{x.hobbies}</Person>
+          })}
+        </div>
+      )
+    }
+    const style = {
+      backgroundColor: 'grey'
+    };
+    return (
+      <div className='App' style={style}>
+        <h2>React App</h2>
+        <button onClick={this.toggleShowPerson}>Switch</button>
+        {person}
+      </div>
+    );
+  }
 }
 
-export default app;
+export default App;
