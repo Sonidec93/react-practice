@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
+import AppClass from './App.css';
 import Person from './Person/person';
 import Radium from 'radium';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 // import logo from './logo.svg';
 
 // const app = () => {
@@ -51,6 +51,7 @@ class App extends Component {
   render() {
     let person = null;
     const classes = [];
+    let buttonClass = AppClass.Red;
     const style = {
       backgroundColor: 'red',
       border: '2px solid black',
@@ -65,6 +66,7 @@ class App extends Component {
     };
 
     if (this.state.showPerson) {
+      buttonClass = AppClass.Green
       style.backgroundColor = 'green';
       style[':hover'].backgroundColor = 'lightgreen';
       person = (
@@ -75,27 +77,27 @@ class App extends Component {
         </div>
       )
       if (this.state.persons.length >= 1) {
-        classes.push('app__para--blue');
+        classes.push(AppClass['app__para--blue']);
       }
       if (this.state.persons.length >= 2) {
-        classes.push('app__para--bold');
+        classes.push(AppClass['app__para--bold']);
       }
     }
-    const StyledButton = styled.button`
-    background-color:${props => props.alt};
-    border:2px solid black;
-    &:hover{
-      background-color:transparent;
-    }
-    @media screen and (min-width:480px){
-      background-color:orange;
-    }
-    `
-
+    // const StyledButton = styled.button`
+    // background-color:${props => props.alt};
+    // border:2px solid black;
+    // &:hover{
+    //   background-color:transparent;
+    // }
+    // @media screen and (min-width:480px){
+    //   background-color:orange;
+    // }
+    // `
+    /* <StyledButton alt={this.state.showPerson ? 'red' : 'green'} onClick={this.toggleShowPerson}>Toggle</StyledButton> */
     return (
-      <div className='App'>
+      <div className={AppClass.App}>
         <p className={classes.join(' ')}>React App</p>
-        <StyledButton alt={this.state.showPerson ? 'red' : 'green'} onClick={this.toggleShowPerson}>Toggle</StyledButton>
+        <button className={buttonClass} onClick={this.toggleShowPerson}>Toggle</button>
         {person}
       </div>
 
