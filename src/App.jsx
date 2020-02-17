@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import Person from './Person/person';
+import Radium from 'radium';
+import styled from 'styled-components';
+// import logo from './logo.svg';
 
 // const app = () => {
 // const [state, setState] = useState({
@@ -48,7 +50,23 @@ class App extends Component {
   }
   render() {
     let person = null;
+    const classes = [];
+    const style = {
+      backgroundColor: 'red',
+      border: '2px solid black',
+      ':hover': {
+        backgroundColor: 'transparent',
+        border: '2px solid red'
+      },
+      '@media (min-width:480px)': {
+        backgroundColor: 'violet'
+
+      }
+    };
+
     if (this.state.showPerson) {
+      style.backgroundColor = 'green';
+      style[':hover'].backgroundColor = 'lightgreen';
       person = (
         <div>
           {this.state.persons.map((x, index) => {
@@ -56,18 +74,33 @@ class App extends Component {
           })}
         </div>
       )
+      if (this.state.persons.length >= 1) {
+        classes.push('app__para--blue');
+      }
+      if (this.state.persons.length >= 2) {
+        classes.push('app__para--bold');
+      }
     }
-    const style = {
-      backgroundColor: 'grey'
-    };
+    const StyledButton = styled.button`
+    background-color:${props => props.alt};
+    border:2px solid black;
+    &:hover{
+      background-color:transparent;
+    }
+    @media screen and (min-width:480px){
+      background-color:orange;
+    }
+    `
+
     return (
-      <div className='App' style={style}>
-        <h2>React App</h2>
-        <button onClick={this.toggleShowPerson}>Switch</button>
+      <div className='App'>
+        <p className={classes.join(' ')}>React App</p>
+        <StyledButton alt={this.state.showPerson ? 'red' : 'green'} onClick={this.toggleShowPerson}>Toggle</StyledButton>
         {person}
       </div>
+
     );
   }
 }
 
-export default App;
+export default Radium(App);
