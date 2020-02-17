@@ -1,13 +1,14 @@
-import './person.css';
+import Person from './person.css';
 import React from 'react';
 import Radium from 'radium';
 
 const person = (props) => {
 
     return (
-        <div className="person">
+        <div className={Person.person}>
             <h1 onClick={props.onDelete}>{props.name}</h1>
             <p>My age is {props.age}</p>
+            <p className="glb-modifier">Global value</p>
             <p>{props.children.join(' ')}</p>
             <input type="text" name="name" onChange={props.changeFunc} value={props.name} />
         </div>
