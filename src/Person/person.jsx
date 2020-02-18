@@ -3,7 +3,10 @@ import React from 'react';
 import Radium from 'radium';
 
 const person = (props) => {
-
+    // var rand = Math.random();
+    // if (rand > 0.5) {
+    //     throw new Error('Some error');
+    // }
     return (
         <div className={Person.person}>
             <h1 onClick={props.onDelete}>{props.name}</h1>

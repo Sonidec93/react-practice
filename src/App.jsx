@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AppClass from './App.css';
 import Person from './Person/person';
 import Radium from 'radium';
+import ErrorBoundary from './ErrorBoundary/error-boundary';
 // import styled from 'styled-components';
 // import logo from './logo.svg';
 
@@ -72,7 +73,7 @@ class App extends Component {
       person = (
         <div>
           {this.state.persons.map((x, index) => {
-            return <Person name={x.name} age={x.age} changeFunc={this.changeFunc.bind(this, index)} onDelete={this.deleteHandler.bind(this, index)} key={x.id} >My hobbbies are:{x.hobbies}</Person>
+            return <ErrorBoundary key={x.id}><Person name={x.name} age={x.age} changeFunc={function(event){this.changeFunc(index,event);}.bind(this)} onDelete={this.deleteHandler.bind(this, index)} >My hobbbies are:{x.hobbies}</Person></ErrorBoundary>
           })}
         </div>
       )
