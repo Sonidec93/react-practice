@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import AppClass from './App.css';
-import Person from './Person/person';
+// import Person from './Person/person';
 import Radium from 'radium';
-import ErrorBoundary from './ErrorBoundary/error-boundary';
+// import ErrorBoundary from './ErrorBoundary/error-boundary';
+import Persons from '../components/Persons/persons';
+import Cockpit from '../components/Cockpit/cockpit';
 // import styled from 'styled-components';
 // import logo from './logo.svg';
 
@@ -70,12 +72,13 @@ class App extends Component {
       buttonClass = AppClass.Green
       style.backgroundColor = 'green';
       style[':hover'].backgroundColor = 'lightgreen';
+      // <div>
+      //   {this.state.persons.map((x, index) => {
+      //     return <ErrorBoundary ><Person name={x.name} age={x.age} key={x.id} changeFunc={this.changeFunc.bind(this, index)} onDelete={this.deleteHandler.bind(this, index)} >My hobbbies are:{x.hobbies}</Person></ErrorBoundary>
+      //   })}
+      // </div>
       person = (
-        <div>
-          {this.state.persons.map((x, index) => {
-            return <ErrorBoundary key={x.id}><Person name={x.name} age={x.age} changeFunc={function(event){this.changeFunc(index,event);}.bind(this)} onDelete={this.deleteHandler.bind(this, index)} >My hobbbies are:{x.hobbies}</Person></ErrorBoundary>
-          })}
-        </div>
+        <Persons persons={this.state.persons} changeFunc={this.changeFunc} onDelete={this.deleteHandler}></Persons>
       )
       if (this.state.persons.length >= 1) {
         classes.push(AppClass['app__para--blue']);
@@ -97,8 +100,7 @@ class App extends Component {
     /* <StyledButton alt={this.state.showPerson ? 'red' : 'green'} onClick={this.toggleShowPerson}>Toggle</StyledButton> */
     return (
       <div className={AppClass.App}>
-        <p className={classes.join(' ')}>React App</p>
-        <button className={buttonClass} onClick={this.toggleShowPerson}>Toggle</button>
+        <Cockpit classes={classes} buttonClass={buttonClass} toggleShowPerson={this.toggleShowPerson}></Cockpit>
         {person}
       </div>
 
