@@ -16,13 +16,17 @@ import Cockpit from '../components/Cockpit/cockpit';
 //   ]
 // })
 class App extends Component {
-
+  constructor(props) {
+    super(props);
+    console.log('App.js constructor');
+  }
   state = {
     persons: [
       { id: 'asf1', name: 'mukul', age: 26, hobbies: ['football', 'badminton'] },
       { id: 'asf2', name: 'Ramesh', age: 28, hobbies: ['chess', 'carrom'] }
     ],
-    showPerson: false
+    showPerson: false,
+    showCockpit: true
   }
 
   switchHandler = (newName) => {
@@ -34,6 +38,10 @@ class App extends Component {
     });//using useState react hook will update the state not merge it to old state so we have to make sure we update all values to the state we want to update
 
   }
+
+  // static getDerivedStateFromProps = (props, state) => {
+  //   console.log('getDerivedStateFromProps', props)
+  // }
   changeFunc = (index, event) => {
     let persons = [...this.state.persons];
     persons[index].name = event.target.value;
@@ -41,10 +49,16 @@ class App extends Component {
       persons
     })
   }
-
+  toggleCockpit = () => {
+    let val = this.state.showCockpit;
+    this.setState({ showCockpit: !val });
+  }
+  componentDidMount = () => {
+    console.log('App.js Component Did Mount');
+  }
   toggleShowPerson = () => {
-    let toggledValue = !this.state.showPerson;
-    this.setState({ showPerson: toggledValue });
+    let toggledValue = this.state.showPerson;
+    this.setState({ showPerson: !toggledValue });
   }
   deleteHandler = (index) => {
     let persons = [...this.state.persons];
@@ -52,6 +66,7 @@ class App extends Component {
     this.setState({ persons });
   }
   render() {
+    console.log('render in app.')
     let person = null;
     const classes = [];
     let buttonClass = AppClass.Red;
@@ -100,9 +115,13 @@ class App extends Component {
     /* <StyledButton alt={this.state.showPerson ? 'red' : 'green'} onClick={this.toggleShowPerson}>Toggle</StyledButton> */
     return (
       <div className={AppClass.App}>
-        <Cockpit classes={classes} buttonClass={buttonClass} toggleShowPerson={this.toggleShowPerson}></Cockpit>
+        <button onClick={this.toggleCockpit} className={AppClass.Red}> Toggle Cockpit component</button>
+        {
+          this.state.showCockpit ? <Cockpit persons={this.state.persons} classes={classes} buttonClass={buttonClass} toggleShowPerson={this.toggleShowPerson}></Cockpit>
+            : null
+        }
         {person}
-      </div>
+      </div >
 
     );
   }
