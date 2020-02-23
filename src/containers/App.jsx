@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import AppClass from './App.css';
 // import Person from './Person/person';
-import Radium from 'radium';
+import React, { Component } from 'react';
+import Cockpit from '../components/Cockpit/cockpit';
+import WithClass from '../components/hoc/WithClass';
 // import ErrorBoundary from './ErrorBoundary/error-boundary';
 import Persons from '../components/Persons/persons';
-import Cockpit from '../components/Cockpit/cockpit';
+import AppClass from './App.css';
+import Aux from '../components/hoc/Aux';
+import AuthContext from '../context/app-context';
 // import styled from 'styled-components';
 // import logo from './logo.svg';
 
@@ -26,7 +28,8 @@ class App extends Component {
       { id: 'asf2', name: 'Ramesh', age: 28, hobbies: ['chess', 'carrom'] }
     ],
     showPerson: false,
-    showCockpit: true
+    showCockpit: true,
+    authenticated: false
   }
 
   switchHandler = (newName) => {
@@ -37,6 +40,14 @@ class App extends Component {
       ]
     });//using useState react hook will update the state not merge it to old state so we have to make sure we update all values to the state we want to update
 
+  }
+
+  login = () => {
+    this.setState((prevState, props) => { //correct way to set state if it is dependent on previous state
+      return {
+        authenticated: !prevState.authenticated
+      }
+    })
   }
 
   // static getDerivedStateFromProps = (props, state) => {
@@ -68,8 +79,8 @@ class App extends Component {
   render() {
     console.log('render in app.')
     let person = null;
-    const classes = [];
-    let buttonClass = AppClass.Red;
+    // const classes = [];
+    // let buttonClass = AppClass.Red;
     const style = {
       backgroundColor: 'red',
       border: '2px solid black',
@@ -84,7 +95,7 @@ class App extends Component {
     };
 
     if (this.state.showPerson) {
-      buttonClass = AppClass.Green
+      // buttonClass = AppClass.Green
       style.backgroundColor = 'green';
       style[':hover'].backgroundColor = 'lightgreen';
       // <div>
@@ -95,12 +106,12 @@ class App extends Component {
       person = (
         <Persons persons={this.state.persons} changeFunc={this.changeFunc} onDelete={this.deleteHandler}></Persons>
       )
-      if (this.state.persons.length >= 1) {
-        classes.push(AppClass['app__para--blue']);
-      }
-      if (this.state.persons.length >= 2) {
-        classes.push(AppClass['app__para--bold']);
-      }
+      // if (this.state.persons.length >= 1) {
+      //   classes.push(AppClass['app__para--blue']);
+      // }
+      // if (this.state.persons.length >= 2) {
+      //   classes.push(AppClass['app__para--bold']);
+      // }
     }
     // const StyledButton = styled.button`
     // background-color:${props => props.alt};
@@ -114,17 +125,19 @@ class App extends Component {
     // `
     /* <StyledButton alt={this.state.showPerson ? 'red' : 'green'} onClick={this.toggleShowPerson}>Toggle</StyledButton> */
     return (
-      <div className={AppClass.App}>
+      <Aux>
         <button onClick={this.toggleCockpit} className={AppClass.Red}> Toggle Cockpit component</button>
-        {
-          this.state.showCockpit ? <Cockpit persons={this.state.persons} classes={classes} buttonClass={buttonClass} toggleShowPerson={this.toggleShowPerson}></Cockpit>
-            : null
-        }
-        {person}
-      </div >
+        <AuthContext.Provider value={{authenticated:this.state.authenticated,login:this.login}}>
+          {
+            this.state.showCockpit ? <Cockpit personsLength={this.state.persons.length} toggleShowPerson={this.toggleShowPerson}></Cockpit>
+              : null
+          }
+          {person}
+        </AuthContext.Provider>
+      </Aux>
 
     );
   }
 }
 
-export default Radium(App);
+export default WithClass(App, AppClass.App);
